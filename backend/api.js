@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3001
 var bodyParser = require('body-parser')
 const connection = require('./db')
 const User = require('./schema/User')
+const { v4: uuidv4 } = require('uuid');
 
 
 // create application/json parser
@@ -24,9 +25,11 @@ app.get('/', jsonParser,(req, res) => {
 
 // add
 app.post('/add',jsonParser, async (req, res) => {
-    console.log(req.body)
+    let dataToSend = { ...req.body , id:uuidv4() }
+    console.log('req.body?', dataToSend)
+
     try {
-        const users = await User.create(req.body)
+        const users = await User.create(dataToSend)
         console.log('user', users)
         res.status(200).json({success: true, data: users})
     } catch (error) {
@@ -40,8 +43,8 @@ app.post('/add',jsonParser, async (req, res) => {
   app.get('/getAll',jsonParser, async (req, res) => {
     console.log(req.body)
     try {
-        const users = await User.find({})
-        console.log('user', users)
+        let users = await User.find({})
+
         res.status(200).json({success: true, data: users})
     } catch (error) {
         console.log('error', error)
@@ -63,6 +66,23 @@ app.post('/add',jsonParser, async (req, res) => {
         res.status(200).json({success: false, data: []})   
     }
   })
+
+
+  app.put('/update/:id',jsonParser, async (req, res) => {
+    console.log('id', req.params)
+
+    const {id} = req.params
+    console.log('req.body', req.body)
+    try {
+        const users = await User.findOneAndUpdate({_id:id }, { $set :{...req.body } }, {new: true})
+        console.log('user', users)
+        res.status(200).json({success: true, data: users})
+    } catch (error) {
+        console.log('error', error)
+        res.status(200).json({success: false, data: []})   
+    }
+  })
+
 
 
 
