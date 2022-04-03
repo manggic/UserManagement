@@ -17,7 +17,7 @@ const style = {
   p: 4,
 };
 
-export default function ModalForm({isModalOpen, dataToEdit, handleClose, handleChange}) {
+export default function ModalForm({create = false,isModalOpen, dataToEdit, handleClose, handleChange, fillRandomData, onSaveButtonClick}) {
 
 
     
@@ -31,7 +31,7 @@ export default function ModalForm({isModalOpen, dataToEdit, handleClose, handleC
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <TextField style={{padding: '10px', display: 'flex' }} name='name'  onChange={handleChange} value={dataToEdit.name} label="Name" color="secondary" focused />
+          <TextField  style={{padding: '10px', display: 'flex' }} name='name'  onChange={handleChange} value={dataToEdit.name} label="Name" color="secondary" focused />
           <TextField  style={{padding: '10px',  display: 'flex'  }} name='email'  onChange={handleChange} value={dataToEdit.email} label="Email" color="secondary" focused />
         
         <TextField type='number'  style={{padding: '10px',  display: 'flex'  }} onChange={handleChange} name='mobile' value={dataToEdit.mobile} label="Mobile" color="secondary" focused />
@@ -39,7 +39,10 @@ export default function ModalForm({isModalOpen, dataToEdit, handleClose, handleC
         <TextField type="date" style={{padding: '10px',  display: 'flex'  }} name='DOB' onChange={handleChange} value={dataToEdit.DOB} label="DOB" color="secondary" focused /><br />
         
         <div style={{padding: '0px 10px' }}>
-        <Button  style={{padding: '10px', width: '100%' }}  onClick={handleClose}  variant='contained' color='info'>Save</Button>
+        <Button  style={{padding: '10px', width: '100%' }}  onClick={onSaveButtonClick}  variant='contained' color='info'>Save</Button>
+        </div>
+        <div style={{padding: '0px 10px' , marginTop:'10px'  }}>
+        {create? <Button  style={{padding: '10px', width: '100%' }}  onClick={fillRandomData}  variant='contained' color='info'>Fill Random</Button>:'' }
 
         </div>
         </Box>

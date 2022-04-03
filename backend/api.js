@@ -25,17 +25,29 @@ app.get('/', jsonParser,(req, res) => {
 
 // add
 app.post('/add',jsonParser, async (req, res) => {
-    let dataToSend = { ...req.body , id:uuidv4() }
-    console.log('req.body?', dataToSend)
 
-    try {
-        const users = await User.create(dataToSend)
-        console.log('user', users)
-        res.status(200).json({success: true, data: users})
-    } catch (error) {
-        console.log('error', error)
-        res.status(200).json({success: false, data: []})   
+   
+    const findByMobile =    await User.find({ mobile: req.body.mobile});
+    console.log('findByMobile',findByMobile)
+
+
+    if(findByMobile?.length){
+      res.status(201).json({ success: false, error: true, msg : 'Data is already present'})
+    }else{
+      let dataToSend = { ...req.body , id:uuidv4() }
+      console.log('req.body?', dataToSend)
+  
+      try {
+          const users = await User.create(dataToSend)
+          console.log('user', users)
+          res.status(200).json({success: true, data: users})
+      } catch (error) {
+          console.log('error', error)
+          res.status(200).json({success: false, data: []})   
+      }
     }
+
+   
   })
   
 
@@ -75,6 +87,20 @@ app.post('/add',jsonParser, async (req, res) => {
     console.log('req.body', req.body)
     try {
         const users = await User.findOneAndUpdate({_id:id }, { $set :{...req.body } }, {new: true})
+        console.log('user', users)
+        res.status(200).json({success: true, data: users})
+    } catch (error) {
+        console.log('error', error)
+        res.status(200).json({success: false, data: []})   
+    }
+  })
+
+  app.delete('/deleteAll',jsonParser, async (req, res) => {
+    // console.log('id', req.params)
+
+    // const {id} = req.params
+    try {
+        const users = await User.remove({})
         console.log('user', users)
         res.status(200).json({success: true, data: users})
     } catch (error) {

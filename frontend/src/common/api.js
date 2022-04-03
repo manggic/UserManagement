@@ -37,6 +37,16 @@ const callApi = async (url, method = 'get', data = '' ) => {
                 console.log('Api get error',  err );
             })
             break; 
+        case 'post':
+           await axios.post(url, data)
+            .then(res=> {
+                console.log('Api get response',  res.data.data, res.data );
+                result = res.data
+            })
+            .catch(err => {
+                console.log('Api get error',  err );
+            })
+            break; 
         default:
             break;
     }
